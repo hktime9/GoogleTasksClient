@@ -83,6 +83,14 @@ def updateTask(listID, taskID, updates):
     result= service.tasks().update(tasklist=listID, task=taskID, body=task).execute()
     return result
 
+def deleteTask(listID, taskID):
+    global service
+    return True if(service.tasks().delete(tasklist=listID, task=taskID).execute()=="") else False
+
+def clearCompleted(listID):
+    global service
+    return True if(service.tasks().clear(tasklist=listID).execute()=="") else False
+
 
 SCOPES= ['https://www.googleapis.com/auth/tasks']
 creds= None
