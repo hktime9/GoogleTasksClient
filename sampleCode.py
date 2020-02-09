@@ -68,11 +68,26 @@ def addTask(title='', notes='', due= None, listID='@default'):
     result= service.tasks().insert(tasklist= listID, body= task).execute()
     return result['id']
 
+def getTask(listID, taskID):
+    global service
+    return service.tasks().get(tasklist=listID, task=taskID).execute()
+
+def updateTask(listID, taskID, updates):
+    global service
+    task= getTask(listID, taskID)
+    try:
+        task['title']= updates['title']
+        task['status']= updates['status']
+    except KeyError:
+        pass
+    result= service.tasks().update(tasklist=listID, task=taskID, body=task).execute()
+    return result
+
+
 SCOPES= ['https://www.googleapis.com/auth/tasks']
 creds= None
 setup()
 service= build('tasks', 'v1', credentials=creds)
 tasklist= makeUsableList()
-addTask(title="Work on SPROJ")
 for x in tasklist:
     print(x)
