@@ -40,7 +40,6 @@ def printTasklist(tasks):
 def makeUsableList():
     global service
     lists= getTasksList()
-    retList= []
     for each in lists:
         thisTasks= getTasks(each['id'])
         tasks= []
