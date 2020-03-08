@@ -40,6 +40,17 @@ rectangle:
 			size: self.size
 """
 
+testRect= """
+rectangle:
+	orientation: 'vertical'
+	canvas: 
+		Color: 
+			rgb: (200/255,51/255,51/255)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+""" 
+
 class rectangle(BoxLayout):
 
     def __init__(self, **kwargs):
@@ -68,8 +79,18 @@ class BoxLayoutApp(App):
     	leftBorder.add_widget(leftRect)
     	restBox.add_widget(leftBorder)
 
+    	taskSpace= BoxLayout(orientation='vertical', size_hint=(1.0,1.0))
     	restRect= Builder.load_string(thisRectangle)
-    	restBox.add_widget(restRect)
+
+    	testBox= BoxLayout(orientation="horizontal", size_hint=(0.2,0.2))
+    	testR= Builder.load_string(testRect)
+    	testBox.add_widget(testR)
+    	restRect.add_widget(testBox)
+    	taskSpace.add_widget(restRect)
+    	restBox.add_widget(taskSpace)
+
+    	# taskSpace.add_widget(restRect)
+
 
     	rightBorder= BoxLayout(orientation= 'horizontal', size_hint=(horiBorderSize, 1.0))
     	rightRect= Builder.load_string(sideBorder)
