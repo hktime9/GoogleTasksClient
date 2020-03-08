@@ -7,36 +7,38 @@ from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.uix.textinput import TextInput
 
-thisBorder= """
-border:
-    orientation: 'vertical'
-    
-    canvas:
-        Color:    
-            rgb: (0/255,0/255,0/255)
-        
-        Line: 
-        	rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1])
-"""
-
 thisRectangle= """
 rectangle:
-    orientation: 'vertical'
-    
-    canvas:
-        Color:
-            rgb: (235/255,185/255,3/255)
-        
-        Rectangle:
-        	pos: self.pos
-        	size: self.size
-""" 
+	orientation: 'vertical'
+	canvas: 
+		Color: 
+			rgb: (235/255,185/255,3/255)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+"""
 
-class border(BoxLayout):
+backdrop= """
+rectangle:
+	orientation: 'vertical'
+	canvas: 
+		Color: 
+			rgb: (51/255,51/255,51/255)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+"""
 
-    def __init__(self, **kwargs):
-
-        super().__init__(**kwargs)
+sideBorder= """
+rectangle:
+	orientation: 'vertical'
+	canvas: 
+		Color: 
+			rgb: (51/255,51/255,51/255)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+"""
 
 class rectangle(BoxLayout):
 
@@ -45,28 +47,36 @@ class rectangle(BoxLayout):
         super().__init__(**kwargs)
 
 class BoxLayoutApp(App):
-    def build(self): 
-        mainWindow= BoxLayout(orientation= 'vertical')
-        tasksWindow= BoxLayout(orientation= 'vertical')
-        headingBox= BoxLayout(orientation= 'horizontal', size_hint=(1.0, 0.5))
-        label= Label(text= "Google Tasks", size_hint= (1.0, 1.0), halign= "center", valign= "center")
-        headingBox.add_widget(label)
-        tasksWindow.add_widget(headingBox)
-        numTasks= 20
-        for i in range(numTasks):
-        	task= BoxLayout(orientation= 'horizontal')
-        	buttons= BoxLayout(orientation= 'vertical', size_hint=(None, 1))
-        	border= Builder.load_string(thisBorder, size_hint=(0.75,1.0)) #this might be something
-        	inner= Builder.load_string(thisRectangle)
-        	border.add_widget(inner)
-        	editBtn= Button(text= "Edit", size_hint=(None,0.3333))
-        	deleteBtn= Button(text= "Delete", size_hint=(None,0.3333))
-        	buttons.add_widget(editBtn)
-        	buttons.add_widget(deleteBtn)
-        	task.add_widget(border)
-        	task.add_widget(buttons)
-        	tasksWindow.add_widget(task)
-        mainWindow.add_widget(tasksWindow)
-        return mainWindow
+    def build(self):
+    	headingBoxSize= 0.15
+    	horiBorderSize= 0.01
+    	vertiBorderSize= None
+    	restBoxSize= 1-headingBoxSize-horiBorderSize
+    	mainWindow= BoxLayout(orientation= 'vertical')
+    	
+    	headingBox= BoxLayout(orientation= 'horizontal', size_hint=(1.0, headingBoxSize))
+    	headingRect= Builder.load_string(backdrop)
+    	headingTitle= Label(text= "Google Tasks", size_hint= (1.0, 1.0), halign= "center", valign= "center")
+    	headingRect.add_widget(headingTitle)
+    	headingBox.add_widget(headingRect)
+    	mainWindow.add_widget(headingBox)
+
+    	restBox= BoxLayout(orientation= 'horizontal', size_hint=(1.0, restBoxSize))
+
+    	leftBorder= BoxLayout(orientation= 'horizontal', size_hint=(horiBorderSize, 1.0))
+    	leftRect= Builder.load_string(sideBorder)
+    	leftBorder.add_widget(leftRect)
+    	restBox.add_widget(leftBorder)
+
+    	restRect= Builder.load_string(thisRectangle)
+    	restBox.add_widget(restRect)
+
+    	rightBorder= BoxLayout(orientation= 'horizontal', size_hint=(horiBorderSize, 1.0))
+    	rightRect= Builder.load_string(sideBorder)
+    	rightBorder.add_widget(rightRect)
+    	restBox.add_widget(rightBorder)
+
+    	mainWindow.add_widget(restBox)
+    	return mainWindow
 root= BoxLayoutApp()
 root.run() 
